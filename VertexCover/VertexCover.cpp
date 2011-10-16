@@ -116,6 +116,7 @@ map<int,int> vertexCover::removeableSet(){
 }
 
 //Finding the minimal vertex cover for a given vertex cover
+//Procedure 3.1
 void vertexCover::minimalize(){
     
     //get the resulting map
@@ -144,5 +145,34 @@ void vertexCover::minimalize(){
     
     //Repeat the process until the result
     minimalize();
+}
+
+//Procedure3.2
+//The function performs the removal of the lone point and replace it with the
+//other vertex of the edge
+//Returns true if the swap is possible
+bool vertexCover::swapLoneVertex(){
+    
+    //Get a dummy reference
+    set<int> & vert = vertices;
+    
+    //Lots of code to go in !!!
+    
+    
+}
+
+//This function is used to create a new vertex cover after the removal of the
+//desired vertex
+vertexCover vertexCover::VCAfterRemoval(int v){
+    set<int> tempSet = vertices;
+    
+    //Remove the element
+    tempSet.erase(v);
+    
+    //Create the new VertexCover
+    vertexCover newVertexCover(tempSet,G);
+    
+    //Return the newly formed vertexCover
+    return newVertexCover;
 }
 

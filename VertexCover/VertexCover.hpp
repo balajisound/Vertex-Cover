@@ -32,6 +32,12 @@ public:
     //Finding the minimal vertex cover for a given vertex cover
     void minimalize();
     
+    //Creation
+    vertexCover& VCAfterRemoval(int);
+    
+    //Modification
+    bool swapLoneVertex();
+    
     //getter
     set<int> getVertices();
     

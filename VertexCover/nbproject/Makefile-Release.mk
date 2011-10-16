@@ -35,8 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/_ext/957739886/Edge.o \
 	${OBJECTDIR}/_ext/957739886/Graph.o \
+	${OBJECTDIR}/_ext/957739886/Edge.o \
 	${OBJECTDIR}/_ext/957739886/VertexCover.o
 
 
@@ -69,15 +69,15 @@ ${OBJECTDIR}/main.o: main.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
-${OBJECTDIR}/_ext/957739886/Edge.o: /Users/balajisoundrarajan/Vertex-Cover/VertexCover/Edge.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/957739886
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/957739886/Edge.o /Users/balajisoundrarajan/Vertex-Cover/VertexCover/Edge.cpp
-
 ${OBJECTDIR}/_ext/957739886/Graph.o: /Users/balajisoundrarajan/Vertex-Cover/VertexCover/Graph.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/957739886
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/957739886/Graph.o /Users/balajisoundrarajan/Vertex-Cover/VertexCover/Graph.cpp
+
+${OBJECTDIR}/_ext/957739886/Edge.o: /Users/balajisoundrarajan/Vertex-Cover/VertexCover/Edge.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/957739886
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/957739886/Edge.o /Users/balajisoundrarajan/Vertex-Cover/VertexCover/Edge.cpp
 
 ${OBJECTDIR}/_ext/957739886/VertexCover.o: /Users/balajisoundrarajan/Vertex-Cover/VertexCover/VertexCover.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/957739886

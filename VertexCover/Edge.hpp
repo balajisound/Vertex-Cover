@@ -30,6 +30,7 @@ public:
     //getter functions
     int getVertexOne();
     int getVertexTwo();
+    int getOtherVertex(int);
     
     //Print
     void printEdge() const;

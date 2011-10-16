@@ -25,6 +25,20 @@ int edge::getVertexTwo(){
     return v2;
 }
 
+//Given vertex of the edge , return the other vertex
+int edge::getOtherVertex(int v){
+    if(v == v1){
+        return v2;
+    }
+    
+    if(v == v2){
+        return v1;
+    }
+    
+    //Wrong v.
+    return 0;
+}
+
 //To check if the edge is same ,  just a rearrangement of vertices are checked
 bool edge::operator==(const edge & incoming) const{
     

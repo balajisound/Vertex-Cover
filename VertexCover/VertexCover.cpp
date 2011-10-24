@@ -20,7 +20,7 @@ void vertexCover::setVertices(set<int> temp){
     vertices = temp;
 }
 
-//For a given Vertx Cover, is the vertex removable
+//For a given Vertex Cover, is the vertex removable
 bool vertexCover::isRemovable(int vertex){
     
     //create an instance of the set of already available vertices
@@ -96,6 +96,10 @@ int vertexCover::removalNo(int vertex){
 }
 
 //Returns the mapping of vertex to its corresponding row
+/*The map says the no of vertices that can be removed if 
+ *any particular vertex can be removed
+ */
+
 map<int,int> vertexCover::removeableSet(){
     
     //This will be returned
@@ -123,6 +127,7 @@ void vertexCover::minimalize(){
     map<int,int> result = removeableSet();
     
     //The minimalization is done. Recursion is stopped
+    //AT THIS POINT MINIMALIZATION IS DONE
     if(result.size() == 0)
         return;
     
@@ -151,14 +156,83 @@ void vertexCover::minimalize(){
 //The function performs the removal of the lone point and replace it with the
 //other vertex of the edge
 //Returns true if the swap is possible
-bool vertexCover::swapLoneVertex(){
+void vertexCover::swapLoneVertex(){
+    
+    //Label A:
+    //The below code helps in deciding with there exists a lone vertex
     
     //Get a dummy reference
-    set<int> & vert = vertices;
+    set<int> & thisVertices = vertices;
+    set<edge> thisEdges = G.getEdgesSet();
     
-    //Lots of code to go in !!!
+    //Maps the vertex to the no of neighboring vertices 
+    map<int,int> countOfOutNeigh;
+    
+    //Iterate through all the elements to get the neighbors
+    set<int>::iterator it;
+    set<edge>::iterator edgeIt;
+    for(it = thisVertices.begin(); it != thisVertices.end(); ++it){
+        
+        //Stores all the neighbors of that edge
+        set<int> neighbor;
+        for(edgeIt = thisEdges.begin(); edgeIt != thisEdges.end(); ++edgeIt){
+            
+            edge temp = *edgeIt;
+            
+            //If the vertex is present
+            if(temp.isVertexPresent(*it)){
+                neighbor.insert(temp.getOtherVertex(*it));
+            }
+            
+            //Even if the size of neighbors is more than 1 then it is not
+            //a candidate
+            if(neighbor.size()>1)
+                break;
+        }
+        
+        //Check if the neighbor is of size 1 and the vertex is outside VertexCover
+        if(neighbor.size() != 1){
+            
+            //start examining the next vertex
+            continue;
+        }
+        
+        //Iterates the neighbors
+        set<int>::iterator neighborIt;
+        
+        //Flag to find if minimalize and swap is done
+        bool flag = false;
+        
+        //Iterates the one element
+        for(neighborIt = neighbor.begin(); neighborIt != neighbor.end(); ++neighborIt ){
+            
+            //If the condition is true then the neighbor is not present 
+            //outside the vertex cover . Search again for candidate
+            if(thisVertices.find(*neighborIt) != thisVertices.end()){
+                
+                //start examining the next vertex
+                continue;
+            }
+            
+            //Now we insert the code to remove the vertex and include the new vertex
+            thisVertices.erase(*it);
+            
+            //The neighbor vertex is inserted in place for the removed vertex
+            thisVertices.insert(*neighborIt);
+            
+            //Run the Procedure 3.1 again
+            minimalize();
+            
+            flag = true;
+        }
+        
+        //The swapping is done. No need to check the rest of the vertices
+        if(flag == true)
+            return;
+    }
     
     
+    //End Label     
 }
 
 //This function is used to create a new vertex cover after the removal of the

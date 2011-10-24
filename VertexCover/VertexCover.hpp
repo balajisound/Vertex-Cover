@@ -17,7 +17,7 @@ using namespace std;
 struct vertexCover{
 private :
     set<int> vertices;
-    graph G;
+    graph & G;
     
 public:
     //constructor
@@ -33,10 +33,10 @@ public:
     void minimalize();
     
     //Creation
-    vertexCover& VCAfterRemoval(int);
+    vertexCover VCAfterRemoval(int);
     
     //Modification
-    bool swapLoneVertex();
+    void swapLoneVertex();
     
     //getter
     set<int> getVertices();

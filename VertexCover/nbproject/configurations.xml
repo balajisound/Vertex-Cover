@@ -4,21 +4,21 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>/Users/balajisoundrarajan/Vertex-Cover/VertexCover/Edge.hpp</itemPath>
-      <itemPath>/Users/balajisoundrarajan/Vertex-Cover/VertexCover/Graph.hpp</itemPath>
-      <itemPath>/Users/balajisoundrarajan/Vertex-Cover/VertexCover/VertexCover.hpp</itemPath>
+      <itemPath>./Edge.hpp</itemPath>
+      <itemPath>./Graph.hpp</itemPath>
+      <itemPath>./VertexCover.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>/Users/balajisoundrarajan/Vertex-Cover/VertexCover/graph.txt</itemPath>
+      <itemPath>./graph.txt</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>/Users/balajisoundrarajan/Vertex-Cover/VertexCover/Edge.cpp</itemPath>
-      <itemPath>/Users/balajisoundrarajan/Vertex-Cover/VertexCover/Graph.cpp</itemPath>
-      <itemPath>/Users/balajisoundrarajan/Vertex-Cover/VertexCover/VertexCover.cpp</itemPath>
+      <itemPath>./Edge.cpp</itemPath>
+      <itemPath>./Graph.cpp</itemPath>
+      <itemPath>./VertexCover.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"

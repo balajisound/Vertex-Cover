@@ -1,5 +1,8 @@
 #include "VertexCover.hpp"
 
+//default Constructor
+//vertexCover::vertexCover(graph g): G(g){}
+
 //copy construtor
 vertexCover::vertexCover(const vertexCover & incoming): vertices(incoming.vertices), G(incoming.G){
     
@@ -8,6 +11,30 @@ vertexCover::vertexCover(const vertexCover & incoming): vertices(incoming.vertic
 //default constructor
 vertexCover::vertexCover(set<int> newVertices, graph Graph): vertices(newVertices), G(Graph){
     
+}
+
+
+/*Union of Covers*/
+vertexCover vertexCover::unionVertexCover(vertexCover VC1, vertexCover VC2){
+    
+    //vertices set from VC1 & VC2
+    set<int> VC1Vertices = VC1.vertices;
+    set<int> VC2Vertices = VC2.vertices;
+    set<int> VerticesUnion;
+    
+    set<int>::iterator it;
+    
+    for(it = VC1Vertices.begin(); it != VC1Vertices.end(); ++it){
+        VerticesUnion.insert(*it);        
+    }
+    
+    for(it = VC2Vertices.begin(); it != VC2Vertices.end(); ++it){
+        VerticesUnion.insert(*it); 
+    }
+    
+    vertexCover cover(VerticesUnion, VC1.G);
+    
+    return cover;    
 }
 
 //getter
@@ -74,7 +101,7 @@ int vertexCover::removalNo(int vertex){
     
     //If the number cannot be removed then return 0
     if(!isRemovable(vertex)){
-        return 0;
+        return -1;
     }
     
     //create an instance of the set of already available vertices
@@ -93,6 +120,9 @@ int vertexCover::removalNo(int vertex){
         if(tempVC.isRemovable((*it)))
             ++count;
     }
+    
+    //return the answer
+    return count;
 }
 
 //Returns the mapping of vertex to its corresponding row
@@ -112,7 +142,7 @@ map<int,int> vertexCover::removeableSet(){
         //The removal number of all the vertices are found and 
         //populated in the matrix
         int temp;        
-        if(temp = removalNo((*it)) != 0 )
+        if(temp = removalNo((*it)) != -1 )
             result[(*it)] = temp;
     }
     
@@ -156,7 +186,7 @@ void vertexCover::minimalize(){
 //The function performs the removal of the lone point and replace it with the
 //other vertex of the edge
 //Returns true if the swap is possible
-void vertexCover::swapLoneVertex(){
+bool vertexCover::swapLoneVertex(){
     
     //Label A:
     //The below code helps in deciding with there exists a lone vertex
@@ -181,7 +211,16 @@ void vertexCover::swapLoneVertex(){
             
             //If the vertex is present
             if(temp.isVertexPresent(*it)){
-                neighbor.insert(temp.getOtherVertex(*it));
+                
+                //This is the other vertex of the given edge
+                int otherVertex = temp.getOtherVertex(*it);
+                
+                //Check if the other vertex is notpresent in the vertex cover
+                if(vertices.find(otherVertex) == vertices.end()){
+                    
+                    //Add it.
+                    neighbor.insert(temp.getOtherVertex(*it));
+                }
             }
             
             //Even if the size of neighbors is more than 1 then it is not
@@ -200,19 +239,8 @@ void vertexCover::swapLoneVertex(){
         //Iterates the neighbors
         set<int>::iterator neighborIt;
         
-        //Flag to find if minimalize and swap is done
-        bool flag = false;
-        
         //Iterates the one element
         for(neighborIt = neighbor.begin(); neighborIt != neighbor.end(); ++neighborIt ){
-            
-            //If the condition is true then the neighbor is not present 
-            //outside the vertex cover . Search again for candidate
-            if(thisVertices.find(*neighborIt) != thisVertices.end()){
-                
-                //start examining the next vertex
-                continue;
-            }
             
             //Now we insert the code to remove the vertex and include the new vertex
             thisVertices.erase(*it);
@@ -220,18 +248,17 @@ void vertexCover::swapLoneVertex(){
             //The neighbor vertex is inserted in place for the removed vertex
             thisVertices.insert(*neighborIt);
             
-            //Run the Procedure 3.1 again
-            minimalize();
-            
-            flag = true;
         }
         
-        //The swapping is done. No need to check the rest of the vertices
-        if(flag == true)
-            return;
+        //Run the Procedure 3.1 again
+        minimalize();
+        
+        //The swapping is done, we return true
+        return true;
     }
     
-    
+    //If swapping is not done, we return false
+    return false;
     //End Label     
 }
 
@@ -250,3 +277,142 @@ vertexCover vertexCover::VCAfterRemoval(int v){
     return newVertexCover;
 }
 
+/*This function calculates the single minimal vertex cover of the initial
+ vertex cover i.e. all vertices of the graph. The algorithm followed is 
+ * Ashay Dharwadkar's Algorithm Part1*/
+vector<vertexCover> vertexCover::computeMinimalVC(){
+    
+    //Flag to signal the end of iteration
+    bool found = false;
+    
+    //Dummy initial value that will be replaced
+    int minimum = INT_MAX;
+    set<int> dummy;
+    vertexCover minimalVC(dummy, G);
+    
+    //Answer that will be returned
+    vector<vertexCover> allCover;
+    
+    //Iterator for the set of vertices
+    set<int>::iterator setIt;
+    
+    //Create a temporary reference to whole vertex set
+    set<int> vertexSet = G.getVerticesSet();
+    
+    //Iterate through all the vertices
+    for(setIt = vertexSet.begin(); setIt != vertexSet.end() ; ++setIt  ){
+        
+        //copy constructor is used to create a copy
+        vertexCover cover = (*this).VCAfterRemoval((*setIt));
+        
+        //Performing procedure 3.1
+        cover.minimalize();
+        
+        //get the cover size
+        int s = cover.getVertexCoverSize();
+        
+        if(s < minimum){
+            minimum = s;
+            minimalVC = cover;
+        }
+        
+        if(s <= G.getK()){
+            
+            //allCover.push_back(cover);
+            minimalVC = cover;
+            found = true;
+            break;
+        }
+        
+        for(int j=0 ; j < (G.getTotalVertices()-G.getK()); ++j){
+            if(!cover.swapLoneVertex()){
+                break;
+            };
+        }
+        
+        //get the cover size
+        s = cover.getVertexCoverSize();
+        
+        if(s < minimum){
+            minimalVC = cover;
+        }
+        
+        allCover.push_back(cover);
+        
+        if(s <= G.getK()){
+            
+            //This is the answer
+            minimalVC = cover;
+            found = true;
+            break;
+        }
+    }
+
+    //Pair-wise Union
+    for(int i=0 ; i < allCover.size(); ++i){
+        
+        //Found is calculated in the previous loop also
+        if(found)
+            break;
+        
+        for(int j=i+1; j < allCover.size(); ++j){
+            if(found)
+                break;
+            
+            vertexCover unionCover = unionVertexCover(allCover[i],allCover[j]);
+            
+            //Calling Procedure 1
+            unionCover.minimalize();
+            
+            //Get the size of the vertex cover
+            int s = unionCover.getVertexCoverSize();
+            
+            if(s < minimum){
+                minimum = s;
+                minimalVC = unionCover;
+            }
+            
+            if(s<= G.getK()){
+                //This is the answer
+                minimalVC = unionCover;
+                found = true;
+                break;
+            }
+            
+            for(int k = 0 ; k < G.getK(); ++k){
+                if(!unionCover.swapLoneVertex()){
+                    break;
+                }
+            }
+            
+            s = unionCover.getVertexCoverSize();
+            
+            if(s < minimum){
+                minimum = s;
+                minimalVC = unionCover;
+            }
+            
+            if(s<= G.getK()){
+                //This is the answer
+                minimalVC = unionCover;
+                found = true;
+                break;
+            }
+        }
+    }
+    
+    //Result is stored in minimal VC . So print the answer.
+    cout << "Size of the vertex cover : " << minimalVC.getVertexCoverSize() << endl;
+    set<int> vertices = minimalVC.getVertices();
+    set<int>::iterator It;
+    
+    for(It = vertices.begin(); It != vertices.end(); ++It){
+        cout << (*It) <<endl;
+    }
+    
+}
+
+/*Get the size of the vertex cover*/
+int vertexCover::getVertexCoverSize(){
+    return vertices.size();
+}

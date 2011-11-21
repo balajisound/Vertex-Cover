@@ -12,6 +12,7 @@
                    displayName="Resource Files"
                    projectFiles="true">
       <itemPath>./graph.txt</itemPath>
+      <itemPath>sample.txt</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"

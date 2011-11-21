@@ -4,6 +4,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
+#include <cmath>
 
 using namespace std;
 
@@ -86,6 +87,44 @@ graph::graph(string filename){
     }
 }
 
+/*Construct for Suresh's Format*/
+graph::graph(string filename, int flag): nMaxDegree(0){
+    
+    flag = 96;
+    
+    //Opening file after converting the string to a c-style string
+    ifstream ifs(filename.c_str());
+    
+    //Check if there is no error opening the file.
+    if(!ifs.good()){
+        cout << "Error Opening File";
+        exit(1);
+    }
+    //Read the first line that contains the no of vertices
+    string s;
+    getline (ifs, s);
+    istringstream iss(s);
+    vector<int> info;
+    copy(istream_iterator<int>(iss), istream_iterator<int>(), back_inserter(info));
+    nVertices = info[0];
+    
+    while(getline(ifs,s)){
+        vector<int> array;
+        istringstream isss(s);
+        copy(istream_iterator<int>(isss), istream_iterator<int>(), back_inserter(array));
+        verticesSet.insert(array[0]);
+        for(int i=1; i <array.size() ; ++i){
+            edgesSet.insert(edge(array[0],array[i]));
+        }
+        
+        //Calculate nMaxDegree
+        if(nMaxDegree < array.size())
+            nMaxDegree = array.size();
+    }
+    
+    k = nVertices - ceil(nVertices / (nMaxDegree +1));
+}
+
 /*Print the adjacency matrix*/
 void graph::printMatrix(){
     cout << endl << "Printing the Adjacency Matrix" <<endl;
@@ -107,6 +146,16 @@ set<edge> graph::getEdgesSet(){
     return edgesSet;
 }
 
+/*Return Max Degree*/
+int graph::getMaxDegree(){
+    return nMaxDegree;
+}
+
+/*Return the value of k i.e. atmost value of the size of VC*/
+int graph::getK(){
+    return k;
+}
+
 /*Print the edge set of the matrix*/
 void graph::printEdges(){
     cout <<endl << "Printing the edges" <<endl;
@@ -123,4 +172,9 @@ void graph::printVertices(){
     for(it = verticesSet.begin(); it != verticesSet.end(); ++it){
         cout << *it <<  " " ;
     }
+}
+
+/*Return the total number of vertices in the graph*/
+int graph::getTotalVertices(){
+    return nVertices;
 }

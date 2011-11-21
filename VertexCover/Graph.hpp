@@ -22,6 +22,12 @@ private:
     //This nVertices is not required later
     int nVertices;
     
+    //Maximum degree of the graph
+    int nMaxDegree;
+    
+    //Atmost size of Vertex cover for this graph
+    int k;
+    
     /*Constructing the Adjacency Matrix, where the dimension are 
      *[nVertices+1, nVertices+1], since the elements can be accessed without
      * adjusting the offset there by eliminating the errors. 
@@ -41,6 +47,7 @@ public:
     //Constructors
     graph(set<int>, set<edge>);
     graph(string filename);
+    graph(string filename, int flag);
     
     //Printing
     void printMatrix();    
@@ -50,6 +57,9 @@ public:
     //Get functions
     set<int> getVerticesSet();
     set<edge> getEdgesSet();
+    int getMaxDegree();
+    int getK();
+    int getTotalVertices();
     
 };
 

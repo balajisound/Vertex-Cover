@@ -8,6 +8,7 @@
 #include "Graph.hpp"
 #include <set>
 #include <map>
+#include <iostream>
 
 using namespace std;
 
@@ -17,10 +18,12 @@ using namespace std;
 struct vertexCover{
 private :
     set<int> vertices;
-    graph & G;
+    graph G;
     
 public:
+    
     //constructor
+    //vertexCover(graph);
     vertexCover(const vertexCover & ); //implemented
     vertexCover(set<int> newVertices, graph Graph); //implemented
     
@@ -36,13 +39,20 @@ public:
     vertexCover VCAfterRemoval(int);
     
     //Modification
-    void swapLoneVertex();
+    bool swapLoneVertex();
+    
+    //Compute the part1 of the Ashay Dharwadkar
+    vector<vertexCover> computeMinimalVC();
     
     //getter
     set<int> getVertices();
+    int getVertexCoverSize();
     
     //setter
     void setVertices(set<int>);
+    
+    //Union of Covers
+    static vertexCover unionVertexCover(vertexCover VC1, vertexCover VC2);
     
 };
 

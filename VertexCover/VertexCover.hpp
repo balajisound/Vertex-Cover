@@ -42,7 +42,7 @@ public:
     bool swapLoneVertex();
     
     //Compute the part1 of the Ashay Dharwadkar
-    vector<vertexCover> computeMinimalVC();
+    void computeMinimalVC();
     
     //getter
     set<int> getVertices();

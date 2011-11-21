@@ -20,12 +20,12 @@ using namespace std;
 int main(int argc, char** argv) {
     
     // Code block to check the input file parsing
-    string filename("sample.txt");
+    string filename("graph.txt");
     graph G(filename, 97);
-    //G.printMatrix();
-    G.printEdges();
-    G.printVertices();
-     
+    //G.printEdges();
+    //G.printVertices();
+    vertexCover result(G.getVerticesSet(),G);
+    result.computeMinimalVC();
     
     
     /* code block driver to check the edge equality and set addition

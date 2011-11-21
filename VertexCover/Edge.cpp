@@ -4,7 +4,10 @@
 using namespace std;
 
 //edge contructor. The edge cannot be of any other type
-edge::edge(int V1, int V2): v1(V1), v2(V2){
+edge::edge(int V1, int V2){
+    
+    v1 = min(V1,V2);
+    v2 = max(V1,V2);
     
 }
 
@@ -57,20 +60,22 @@ bool edge::operator==(const edge & incoming) const{
 bool edge::operator <(const edge& incoming) const{
     
     //If the incoming elements are same by operator== then return false;
-    if(*this == incoming)
+    //if(*this == incoming)
+    //    return false;
+    if((incoming.v1 == v1) && (incoming.v2 == v2))
         return false;
     
     //If the incoming element is small, then place it first i.e. small
-    if(incoming.v1 < v1)
-        return true;
-    
     if(incoming.v1 > v1)
         return false;
     
-    if(incoming.v2 < v2)
+    if(incoming.v1 < v1)
         return true;
     
-    return false;
+    if(incoming.v2 > v2)
+        return false;
+    
+    return true;
 }
 
 //Print the edges

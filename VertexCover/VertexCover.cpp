@@ -280,7 +280,7 @@ vertexCover vertexCover::VCAfterRemoval(int v){
 /*This function calculates the single minimal vertex cover of the initial
  vertex cover i.e. all vertices of the graph. The algorithm followed is 
  * Ashay Dharwadkar's Algorithm Part1*/
-vector<vertexCover> vertexCover::computeMinimalVC(){
+void vertexCover::computeMinimalVC(){
     
     //Flag to signal the end of iteration
     bool found = false;
@@ -402,7 +402,7 @@ vector<vertexCover> vertexCover::computeMinimalVC(){
     }
     
     //Result is stored in minimal VC . So print the answer.
-    cout << "Size of the vertex cover : " << minimalVC.getVertexCoverSize() << endl;
+    cout <<  minimalVC.getVertexCoverSize() << endl;
     set<int> vertices = minimalVC.getVertices();
     set<int>::iterator It;
     

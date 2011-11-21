@@ -172,6 +172,7 @@ void graph::printVertices(){
     for(it = verticesSet.begin(); it != verticesSet.end(); ++it){
         cout << *it <<  " " ;
     }
+    cout<<endl;
 }
 
 /*Return the total number of vertices in the graph*/

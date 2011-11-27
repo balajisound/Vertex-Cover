@@ -9,7 +9,7 @@ vertexCover::vertexCover(const vertexCover & incoming): vertices(incoming.vertic
 }
 
 //default constructor
-vertexCover::vertexCover(set<int> newVertices, graph Graph): vertices(newVertices), G(Graph){
+vertexCover::vertexCover(set<int> newVertices, graph * Graph): vertices(newVertices), G(Graph){
     
 }
 
@@ -77,7 +77,7 @@ bool vertexCover::isRemovable(int vertex){
     tempVertices.erase(vertex);
     
     //Get the edge set of the graph
-    set<edge> tempEdges = G.getEdgesSet();
+    set<edge> tempEdges = (*G).getEdgesSet();
     
     //Default. If it fails at any stage , it is set to false.
     bool flag = true;
@@ -235,7 +235,7 @@ bool vertexCover::swapLoneVertex(){
     
     //Get a dummy reference
     set<int> & thisVertices = vertices;
-    set<edge> thisEdges = G.getEdgesSet();
+    set<edge> thisEdges = (*G).getEdgesSet();
     
     //Maps the vertex to the no of neighboring vertices 
     map<int,int> countOfOutNeigh;
@@ -346,7 +346,7 @@ void vertexCover::computeMinimalVC(){
     set<int>::iterator setIt;
     
     //Create a temporary reference to whole vertex set
-    set<int> vertexSet = G.getVerticesSet();
+    set<int> vertexSet = (*G).getVerticesSet();
     
     //Iterate through all the vertices
     for(setIt = vertexSet.begin(); setIt != vertexSet.end() ; ++setIt  ){
@@ -369,7 +369,7 @@ void vertexCover::computeMinimalVC(){
         }
         
         //This should never execute
-        if(s <= G.getK()){
+        if(s <= (*G).getK()){
             
             //allCover.push_back(cover);
             minimalVC = cover;
@@ -377,7 +377,7 @@ void vertexCover::computeMinimalVC(){
             break;
         }
         
-        for(int j=0 ; j < (G.getTotalVertices()-G.getK()); ++j){
+        for(int j=0 ; j < (((*G).getTotalVertices())-((*G).getK())); ++j){
             if(!cover.swapLoneVertex()){
                 break;
             };
@@ -397,7 +397,7 @@ void vertexCover::computeMinimalVC(){
         allCover.push_back(cover);
         
         //This should never execute
-        if(s <= G.getK()){
+        if(s <= (*G).getK()){
             
             //This is the answer
             minimalVC = cover;
@@ -435,14 +435,14 @@ void vertexCover::computeMinimalVC(){
             }
             
             //This should never execute
-            if(s<= G.getK()){
+            if(s<= (*G).getK()){
                 //This is the answer
                 minimalVC = unionCover;
                 found = true;
                 break;
             }
             
-            for(int k = 0 ; k < G.getK(); ++k){
+            for(int k = 0 ; k < (*G).getK(); ++k){
                 if(!unionCover.swapLoneVertex()){
                     break;
                 }
@@ -457,7 +457,7 @@ void vertexCover::computeMinimalVC(){
             }
             
             //This should never execute
-            if(s<= G.getK()){
+            if(s<= (*G).getK()){
                 //This is the answer
                 minimalVC = unionCover;
                 found = true;

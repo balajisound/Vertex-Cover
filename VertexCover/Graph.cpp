@@ -101,7 +101,7 @@ graph::graph(string filename){
     k = nVertices - ceil(nVertices / (nMaxDegree +1));
     
     //But we are setting it to zero
-    k = 39;
+    k = 40;
 }
 
 /*Constructor for Suresh's Format*/
@@ -166,7 +166,7 @@ graph::graph(string filename, bool flag): nMaxDegree(0){
     k = nVertices - ceil(nVertices / (nMaxDegree +1));
     
     //But we are setting it to zero
-    k = 420;
+    k = 40;
 }
 
 /*Print the adjacency matrix*/

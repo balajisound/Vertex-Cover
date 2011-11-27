@@ -20,10 +20,10 @@ using namespace std;
 int main(int argc, char** argv) {
     
     // Code block to check the input file parsing
-    string filename("small.txt");
-    graph G(filename);
+    string filename("sample.txt");
+    graph G(filename,97);
     //cout << "K : " << G.getK() << endl;
-    vertexCover result(G.getVerticesSet(),G);
+    vertexCover result(G.getVerticesSet(),&G);
     result.computeMinimalVC();
     
     /*debug*/

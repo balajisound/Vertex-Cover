@@ -18,14 +18,14 @@ using namespace std;
 struct vertexCover{
 private :
     set<int> vertices;
-    graph G;
+    graph * G;
     
 public:
     
     //constructor
     //vertexCover(graph);
     vertexCover(const vertexCover & ); //implemented
-    vertexCover(set<int> newVertices, graph Graph); //implemented
+    vertexCover(set<int> newVertices, graph * Graph); //implemented
     
     //Checking functionalities
     map<int,int> removeableSet();

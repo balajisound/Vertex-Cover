@@ -54,6 +54,9 @@ public:
     //Union of Covers
     static vertexCover unionVertexCover(vertexCover VC1, vertexCover VC2);
     
+    //Print the vertex cover
+    void PrintVertexCover();
+    
 };
 
 

@@ -14,7 +14,10 @@ graph::graph(set<int> vertices, set<edge> edges):verticesSet(vertices),edgesSet(
 }
 
 //This Constructor is used to construct the first Graph from the input file
+//for adjacency Matrix
 graph::graph(string filename){
+    
+    cout << "Running Ashay's Format" << endl;
     
     //Opening file after converting the string to a c-style string
     ifstream ifs(filename.c_str());
@@ -77,21 +80,35 @@ graph::graph(string filename){
         verticesSet.insert(i);
     }
     
+    
+    nMaxDegree = 0;
+    int counting =0;
     //Populate the edge set
     for(int i=0; i< matrix.size();++i){
         for(int j=0 ; j<i ; ++j){
             if(matrix[i][j] == 1){
                 edgesSet.insert(edge(i,j));
+                ++counting;
             }
         }
+        if(counting > nMaxDegree){
+            nMaxDegree = counting;
+        }
+        counting = 0;
     }
+    
+    //This is the k value which Ashay has mentioned
+    k = nVertices - ceil(nVertices / (nMaxDegree +1));
+    
+    //But we are setting it to zero
+    k = 39;
 }
 
-/*Construct for Suresh's Format*/
-graph::graph(string filename, int flag): nMaxDegree(0){
+/*Constructor for Suresh's Format*/
+graph::graph(string filename, bool flag): nMaxDegree(0){
     
-    flag = 96;
-    
+    cout << "Running Suresh's Format" << endl;
+ 
     //Opening file after converting the string to a c-style string
     ifstream ifs(filename.c_str());
     
@@ -100,14 +117,20 @@ graph::graph(string filename, int flag): nMaxDegree(0){
         cout << "Error Opening File";
         exit(1);
     }
-    //Read the first line that contains the no of vertices
+    
+    //Read the first line that contains the no of vertices and no of edges
     string s;
     getline (ifs, s);
     istringstream iss(s);
     vector<int> info;
     copy(istream_iterator<int>(iss), istream_iterator<int>(), back_inserter(info));
     nVertices = info[0];
+    int nedges = info[1];
     
+    //variable to check the number of vertices
+    int tempVerticesCount = 0;
+    
+    //Read the adjacency list
     while(getline(ifs,s)){
         vector<int> array;
         istringstream isss(s);
@@ -118,11 +141,32 @@ graph::graph(string filename, int flag): nMaxDegree(0){
         }
         
         //Calculate nMaxDegree
-        if(nMaxDegree < array.size())
-            nMaxDegree = array.size();
+        if(nMaxDegree < (array.size()-1)){
+           nMaxDegree = array.size()-1;
+           //cout << "New Max degree vertex = " <<array[0]<<endl; 
+        }
+        
+        //Update the temp count for the vertices
+        ++tempVerticesCount;
     }
     
+    //Check the number of edges
+    if(nedges != edgesSet.size())
+        cout << "NO of edges are not correct";
+    
+    //Check the number of vertices
+    if(nVertices != tempVerticesCount)
+        cout << "No of Vertices are not correct";
+    
+    cout << "No of Vertices =" << nVertices << endl;
+    //cout << "MaxDegree =" << nMaxDegree << endl;
+        
+    
+    //This is the k value which Ashay has mentioned
     k = nVertices - ceil(nVertices / (nMaxDegree +1));
+    
+    //But we are setting it to zero
+    k = 420;
 }
 
 /*Print the adjacency matrix*/

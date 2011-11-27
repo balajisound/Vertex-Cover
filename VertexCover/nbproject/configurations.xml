@@ -13,6 +13,7 @@
                    projectFiles="true">
       <itemPath>./graph.txt</itemPath>
       <itemPath>sample.txt</itemPath>
+      <itemPath>small.txt</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"

@@ -17,12 +17,21 @@ vertexCover::vertexCover(set<int> newVertices, graph Graph): vertices(newVertice
 /*Union of Covers*/
 vertexCover vertexCover::unionVertexCover(vertexCover VC1, vertexCover VC2){
     
+    //Debug
+    static int count = 0; 
+    cout << " Calling unionVertexCover " <<count++ << endl <<flush;
+    
     //vertices set from VC1 & VC2
     set<int> VC1Vertices = VC1.vertices;
     set<int> VC2Vertices = VC2.vertices;
     set<int> VerticesUnion;
     
     set<int>::iterator it;
+    
+    //Debug
+    //static int i=0;
+    
+    //cout << "Union" << i++ <<flush;
     
     for(it = VC1Vertices.begin(); it != VC1Vertices.end(); ++it){
         VerticesUnion.insert(*it);        
@@ -31,6 +40,13 @@ vertexCover vertexCover::unionVertexCover(vertexCover VC1, vertexCover VC2){
     for(it = VC2Vertices.begin(); it != VC2Vertices.end(); ++it){
         VerticesUnion.insert(*it); 
     }
+    
+    //Debug
+    /*for(set<int>::iterator ite=VerticesUnion.begin(); ite!=VerticesUnion.end() ; ++ite){
+        cout << " " << *ite;
+    }
+    
+    cout << endl <<flush;**/
     
     vertexCover cover(VerticesUnion, VC1.G);
     
@@ -49,6 +65,10 @@ void vertexCover::setVertices(set<int> temp){
 
 //For a given Vertex Cover, is the vertex removable
 bool vertexCover::isRemovable(int vertex){
+    
+    //Debug
+    //static int count = 0;
+    //cout<<"calling isRemovable " << count++ << endl<<flush;
     
     //create an instance of the set of already available vertices
     set<int> tempVertices = vertices;
@@ -99,13 +119,22 @@ bool vertexCover::isRemovable(int vertex){
 //if vertex is removed
 int vertexCover::removalNo(int vertex){
     
-    //If the number cannot be removed then return 0
+    //Debug
+    static int count1 = 0;
+    cout<<"calling removalNo " << count1++ << endl << flush;
+    
+    //If the number cannot be removed then return -1
     if(!isRemovable(vertex)){
         return -1;
     }
     
     //create an instance of the set of already available vertices
     set<int> tempVertices = vertices;
+    
+    
+    //Since the vertex is removable, remove it from the tempVertices
+    if(tempVertices.erase(vertex) == 0)
+        cout <<"There is a problem";
     
     //create a new vertex cover with the new removed vertex set.
     vertexCover tempVC(tempVertices, G);
@@ -132,6 +161,10 @@ int vertexCover::removalNo(int vertex){
 
 map<int,int> vertexCover::removeableSet(){
     
+    //Debug
+    static int count = 0;
+    cout<<"calling removeableSet()" <<count++ <<endl<<flush;
+    
     //This will be returned
     map<int,int> result;
     
@@ -141,8 +174,8 @@ map<int,int> vertexCover::removeableSet(){
         
         //The removal number of all the vertices are found and 
         //populated in the matrix
-        int temp;        
-        if(temp = removalNo((*it)) != -1 )
+        int temp = removalNo((*it));        
+        if(temp != -1 )
             result[(*it)] = temp;
     }
     
@@ -152,6 +185,10 @@ map<int,int> vertexCover::removeableSet(){
 //Finding the minimal vertex cover for a given vertex cover
 //Procedure 3.1
 void vertexCover::minimalize(){
+    
+    //Debug
+    static int count = 0;
+    cout<<"calling minimalize()" << count++ << endl << flush;
     
     //get the resulting map
     map<int,int> result = removeableSet();
@@ -164,7 +201,7 @@ void vertexCover::minimalize(){
     
     //Get the vertex with the max value
     int candidateVertex = 0 ;
-    int maxValue = 0;
+    int maxValue = -1;
     
     map<int,int>::iterator it;
     
@@ -188,6 +225,11 @@ void vertexCover::minimalize(){
 //Returns true if the swap is possible
 bool vertexCover::swapLoneVertex(){
     
+    //Debug
+    static int count = 0;
+    cout<<"calling swapLoneVertex()" << count++ << endl << flush;
+    
+    
     //Label A:
     //The below code helps in deciding with there exists a lone vertex
     
@@ -203,7 +245,7 @@ bool vertexCover::swapLoneVertex(){
     set<edge>::iterator edgeIt;
     for(it = thisVertices.begin(); it != thisVertices.end(); ++it){
         
-        //Stores all the neighbors of that edge
+        //Stores all the neighbors of that edge that are not in the Vertexcover
         set<int> neighbor;
         for(edgeIt = thisEdges.begin(); edgeIt != thisEdges.end(); ++edgeIt){
             
@@ -235,6 +277,9 @@ bool vertexCover::swapLoneVertex(){
             //start examining the next vertex
             continue;
         }
+        
+        //Debug
+        //cout << neighbor.size() <<endl <<flush;
         
         //Iterates the neighbors
         set<int>::iterator neighborIt;
@@ -279,8 +324,12 @@ vertexCover vertexCover::VCAfterRemoval(int v){
 
 /*This function calculates the single minimal vertex cover of the initial
  vertex cover i.e. all vertices of the graph. The algorithm followed is 
- * Ashay Dharwadkar's Algorithm Part1*/
+ * Ashay Dharwadker's Algorithm Part1*/
 void vertexCover::computeMinimalVC(){
+    
+    //Debug
+    static int count = 0;
+    cout<<"calling computeMinimalVC() "<<count++ <<endl<<flush;
     
     //Flag to signal the end of iteration
     bool found = false;
@@ -303,19 +352,23 @@ void vertexCover::computeMinimalVC(){
     for(setIt = vertexSet.begin(); setIt != vertexSet.end() ; ++setIt  ){
         
         //copy constructor is used to create a copy
-        vertexCover cover = (*this).VCAfterRemoval((*setIt));
+        vertexCover cover = VCAfterRemoval((*setIt));
         
         //Performing procedure 3.1
         cover.minimalize();
         
         //get the cover size
         int s = cover.getVertexCoverSize();
+        cout <<"Part1";
+        cover.PrintVertexCover();
         
         if(s < minimum){
+            cout << " Vertex Cover size:" << s <<endl<<flush;
             minimum = s;
             minimalVC = cover;
         }
         
+        //This should never execute
         if(s <= G.getK()){
             
             //allCover.push_back(cover);
@@ -332,13 +385,18 @@ void vertexCover::computeMinimalVC(){
         
         //get the cover size
         s = cover.getVertexCoverSize();
+        cout <<"Part2";
+        cover.PrintVertexCover();
         
         if(s < minimum){
+            cout << " Vertex Cover size:" << s <<endl<<flush;
+            minimum = s;
             minimalVC = cover;
         }
         
         allCover.push_back(cover);
         
+        //This should never execute
         if(s <= G.getK()){
             
             //This is the answer
@@ -361,6 +419,9 @@ void vertexCover::computeMinimalVC(){
             
             vertexCover unionCover = unionVertexCover(allCover[i],allCover[j]);
             
+            //Debug
+            //unionCover.PrintVertexCover();
+            
             //Calling Procedure 1
             unionCover.minimalize();
             
@@ -368,10 +429,12 @@ void vertexCover::computeMinimalVC(){
             int s = unionCover.getVertexCoverSize();
             
             if(s < minimum){
+                cout << " Vertex Cover size:" << s <<endl<<flush;
                 minimum = s;
                 minimalVC = unionCover;
             }
             
+            //This should never execute
             if(s<= G.getK()){
                 //This is the answer
                 minimalVC = unionCover;
@@ -388,10 +451,12 @@ void vertexCover::computeMinimalVC(){
             s = unionCover.getVertexCoverSize();
             
             if(s < minimum){
+                cout << " Vertex Cover size:" << s <<endl<<flush;
                 minimum = s;
                 minimalVC = unionCover;
             }
             
+            //This should never execute
             if(s<= G.getK()){
                 //This is the answer
                 minimalVC = unionCover;
@@ -415,4 +480,12 @@ void vertexCover::computeMinimalVC(){
 /*Get the size of the vertex cover*/
 int vertexCover::getVertexCoverSize(){
     return vertices.size();
+}
+
+/*Print the vertex cover*/
+void vertexCover::PrintVertexCover(){
+    cout << "Printing the vertex cover";
+    for(set<int>::iterator ite=vertices.begin(); ite != vertices.end() ; ++ite)
+        cout << *ite << " ";
+    cout << endl <<flush;
 }

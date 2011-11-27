@@ -20,12 +20,15 @@ using namespace std;
 int main(int argc, char** argv) {
     
     // Code block to check the input file parsing
-    string filename("graph.txt");
-    graph G(filename, 97);
-    //G.printEdges();
-    //G.printVertices();
+    string filename("small.txt");
+    graph G(filename);
+    //cout << "K : " << G.getK() << endl;
     vertexCover result(G.getVerticesSet(),G);
     result.computeMinimalVC();
+    
+    /*debug*/
+    //G.printEdges();
+    //G.printVertices();
     
     
     /* code block driver to check the edge equality and set addition

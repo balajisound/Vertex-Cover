@@ -43,11 +43,14 @@ private:
     set<edge> edgesSet;
     
 public:
+    
+    //Static Object
+    //static graph globalGraph;
      
     //Constructors
     graph(set<int>, set<edge>);
     graph(string filename);
-    graph(string filename, int flag);
+    graph(string filename, bool flag);
     
     //Printing
     void printMatrix();    

@@ -101,7 +101,7 @@ graph::graph(string filename){
     k = nVertices - ceil(nVertices / (nMaxDegree +1));
     
     //But we are setting it to zero
-    k = 40;
+    k = 420;
 }
 
 /*Constructor for Suresh's Format*/
@@ -127,6 +127,14 @@ graph::graph(string filename, bool flag): nMaxDegree(0){
     nVertices = info[0];
     int nedges = info[1];
     
+    //This code block is to initialize the matrix
+    {
+        for(int first = 0; first < nVertices+1; ++first){
+            vector<int> temp(nVertices+1,0);
+            matrix.push_back(temp);
+        }
+    }
+    
     //variable to check the number of vertices
     int tempVerticesCount = 0;
     
@@ -138,6 +146,7 @@ graph::graph(string filename, bool flag): nMaxDegree(0){
         verticesSet.insert(array[0]);
         for(int i=1; i <array.size() ; ++i){
             edgesSet.insert(edge(array[0],array[i]));
+            matrix[array[0]][array[i]]=1; // This is where we built the adjacency matrix
         }
         
         //Calculate nMaxDegree
@@ -166,7 +175,7 @@ graph::graph(string filename, bool flag): nMaxDegree(0){
     k = nVertices - ceil(nVertices / (nMaxDegree +1));
     
     //But we are setting it to zero
-    k = 40;
+    k = 420;
 }
 
 /*Print the adjacency matrix*/
@@ -222,4 +231,9 @@ void graph::printVertices(){
 /*Return the total number of vertices in the graph*/
 int graph::getTotalVertices(){
     return nVertices;
+}
+
+/*Return the adjacency matrix*/
+vector< vector <int> > & graph::getMatrix(){
+    return matrix;
 }

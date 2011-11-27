@@ -60,6 +60,7 @@ public:
     //Get functions
     set<int> getVerticesSet();
     set<edge> getEdgesSet();
+    vector <vector <int> > & getMatrix();
     int getMaxDegree();
     int getK();
     int getTotalVertices();

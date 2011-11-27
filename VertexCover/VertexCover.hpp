@@ -31,6 +31,7 @@ public:
     map<int,int> removeableSet();
     int removalNo(int);
     bool isRemovable(int vertex);
+    bool isRemovableUsingMatrix(int);
     
     //Finding the minimal vertex cover for a given vertex cover
     void minimalize();

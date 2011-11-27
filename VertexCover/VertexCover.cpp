@@ -63,6 +63,38 @@ void vertexCover::setVertices(set<int> temp){
     vertices = temp;
 }
 
+//For a given Vertex Cover, is the vertex removable using Matrix
+bool vertexCover::isRemovableUsingMatrix(int vertex){
+    
+    //Create an instance of the set of already available vertices
+    set<int> tempVertices = vertices;
+    
+    //Remove that particular element from the set
+    tempVertices.erase(vertex);
+    
+    //Get a reference to the adjacency matrix
+    vector< vector <int> > & adjMatrix = (*G).getMatrix();
+    
+    //Check the adjacency matrix
+    for(int loop = 0; loop < adjMatrix[vertex].size(); ++loop){
+        
+        //If there is an edge
+        if(adjMatrix[vertex][loop] == 1){
+            
+            //Check if the other vertex is in the set
+            set<int>::iterator ite;
+            ite = tempVertices.find(loop);
+            
+            //if the other vertice is not found , then false;
+            if(ite == tempVertices.end())
+                return false;
+        }
+    }
+    
+    //Did not break so true;
+    return true;
+}
+
 //For a given Vertex Cover, is the vertex removable
 bool vertexCover::isRemovable(int vertex){
     
@@ -124,7 +156,7 @@ int vertexCover::removalNo(int vertex){
     cout<<"calling removalNo " << count1++ << endl << flush;
     
     //If the number cannot be removed then return -1
-    if(!isRemovable(vertex)){
+    if(!isRemovableUsingMatrix(vertex)){
         return -1;
     }
     
@@ -146,7 +178,7 @@ int vertexCover::removalNo(int vertex){
     for(it = tempVertices.begin(); it != tempVertices.end(); ++it){
         
         //If the element can be removed then increment the count of removables.
-        if(tempVC.isRemovable((*it)))
+        if(tempVC.isRemovableUsingMatrix((*it)))
             ++count;
     }
     

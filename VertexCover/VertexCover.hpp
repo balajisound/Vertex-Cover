@@ -17,7 +17,7 @@ using namespace std;
 
 struct vertexCover{
 private :
-    set<int> vertices;
+    vector<int> verticesV;
     graph * G;
     
 public:
@@ -25,7 +25,7 @@ public:
     //constructor
     //vertexCover(graph);
     vertexCover(const vertexCover & ); //implemented
-    vertexCover(set<int> newVertices, graph * Graph); //implemented
+    vertexCover(vector<int> newVertices, graph * Graph); //implemented
     
     //Checking functionalities
     map<int,int> removeableSet();
@@ -40,17 +40,15 @@ public:
     vertexCover VCAfterRemoval(int);
     
     //Modification
-    bool swapLoneVertex();
+    void swapLoneVertex(int);
     
     //Compute the part1 of the Ashay Dharwadkar
     void computeMinimalVC();
     
     //getter
-    set<int> getVertices();
+    vector<int> getVertices();
     int getVertexCoverSize();
     
-    //setter
-    void setVertices(set<int>);
     
     //Union of Covers
     static vertexCover unionVertexCover(vertexCover VC1, vertexCover VC2);

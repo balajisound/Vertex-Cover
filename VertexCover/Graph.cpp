@@ -1,4 +1,5 @@
 #include "Graph.hpp"
+#include "VertexCover.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -7,11 +8,6 @@
 #include <cmath>
 
 using namespace std;
-
-//This constructor helps creating a new Graph
-graph::graph(set<int> vertices, set<edge> edges):verticesSet(vertices),edgesSet(edges){
-    
-}
 
 //This Constructor is used to construct the first Graph from the input file
 //for adjacency Matrix
@@ -38,6 +34,11 @@ graph::graph(string filename){
      *[nVertices+1, nVertices+1], since the elements can be accessed without
      * adjusting the offset there by eliminating the errors. 
      **/
+    
+    //Initialize the vector of vertices
+    vector<int> tempDummy(nVertices+1,1);
+    tempDummy[0]=0;
+    verticesVector = tempDummy;
     
     //Generating the first line which is a dummy line of line nVertices+1
     vector<int> firstLine(nVertices+1,0);
@@ -73,21 +74,14 @@ graph::graph(string filename){
         cout << "The no of entries for input is not equal to the no of vertices"
                 "\n Program Terminating";
         exit(1);
-    }
-    
-    //Populate the vertices set
-    for(int i=1 ; i <= nVertices; ++i){
-        verticesSet.insert(i);
-    }
-    
+    }  
     
     nMaxDegree = 0;
     int counting =0;
     //Populate the edge set
     for(int i=0; i< matrix.size();++i){
-        for(int j=0 ; j<i ; ++j){
+        for(int j=0 ; j < matrix[i].size() ; ++j){
             if(matrix[i][j] == 1){
-                edgesSet.insert(edge(i,j));
                 ++counting;
             }
         }
@@ -97,11 +91,36 @@ graph::graph(string filename){
         counting = 0;
     }
     
-    //This is the k value which Ashay has mentioned
-    k = nVertices - ceil(nVertices / (nMaxDegree +1));
+    //This code will generate the neighboring matrix in a temporary variable
+    //After creation we assign this to the matrix member variable.
+    vector< vector <int> > neighbors;
+    {
+        
+        for(int i =0; i < matrix.size(); ++i){
+            //For each vertex
+            vector <int> neighbor;
+            
+            for(int j =0; j < matrix[i].size() ; ++j ){
+                if(matrix[i][j] == 1)
+                    neighbor.push_back(j);
+            }
+            
+            neighbors.push_back(neighbor);
+        }
+        
+    }
+    
+    matrix = neighbors;
+    
+    
+    //nMaxdegree no longer represents max degree but it represents K
+    nMaxDegree = nVertices - ceil ( nVertices / (nMaxDegree +1));
+    nMaxDegree = (9/10 * nMaxDegree);
     
     //But we are setting it to zero
-    k = 420;
+    k = 1;
+    
+    
 }
 
 /*Constructor for Suresh's Format*/
@@ -125,7 +144,11 @@ graph::graph(string filename, bool flag): nMaxDegree(0){
     vector<int> info;
     copy(istream_iterator<int>(iss), istream_iterator<int>(), back_inserter(info));
     nVertices = info[0];
-    int nedges = info[1];
+    
+    //Initialize the verticesVector
+    vector<int> tempDummy(nVertices+1, 1);
+    tempDummy[0]=0;
+    verticesVector = tempDummy;
     
     //This code block is to initialize the matrix
     {
@@ -135,45 +158,48 @@ graph::graph(string filename, bool flag): nMaxDegree(0){
         }
     }
     
-    //variable to check the number of vertices
-    int tempVerticesCount = 0;
-    
+    nMaxDegree = 0;
+        
     //Read the adjacency list
     while(getline(ifs,s)){
         vector<int> array;
         istringstream isss(s);
         copy(istream_iterator<int>(isss), istream_iterator<int>(), back_inserter(array));
-        verticesSet.insert(array[0]);
         for(int i=1; i <array.size() ; ++i){
-            edgesSet.insert(edge(array[0],array[i]));
             matrix[array[0]][array[i]]=1; // This is where we built the adjacency matrix
         }
-        
-        //Calculate nMaxDegree
-        if(nMaxDegree < (array.size()-1)){
-           nMaxDegree = array.size()-1;
-           //cout << "New Max degree vertex = " <<array[0]<<endl; 
+        if((array.size()-1) > nMaxDegree){
+            nMaxDegree = array.size()-1;
         }
-        
-        //Update the temp count for the vertices
-        ++tempVerticesCount;
     }
     
-    //Check the number of edges
-    if(nedges != edgesSet.size())
-        cout << "NO of edges are not correct";
-    
-    //Check the number of vertices
-    if(nVertices != tempVerticesCount)
-        cout << "No of Vertices are not correct";
-    
-    cout << "No of Vertices =" << nVertices << endl;
-    //cout << "MaxDegree =" << nMaxDegree << endl;
+    //This code will generate the neighboring matrix in a temporary variable
+    //After creation we assign this to the matrix member variable.
+    vector< vector <int> > neighbors;
+    {
         
+        for(int i =0; i < matrix.size(); ++i){
+            //For each vertex
+            vector <int> neighbor;
+            
+            for(int j =0; j < matrix[i].size() ; ++j ){
+                if(matrix[i][j] == 1)
+                    neighbor.push_back(j);
+            }
+            
+            neighbors.push_back(neighbor);
+        }
+        
+    }
     
-    //This is the k value which Ashay has mentioned
-    k = nVertices - ceil(nVertices / (nMaxDegree +1));
+    matrix = neighbors;
     
+    //nMaxdegree no longer represents max degree but it represents K
+    nMaxDegree = nVertices - ceil ( nVertices / (nMaxDegree +1));
+    nMaxDegree = (9/10 * nMaxDegree);
+    
+    cout << "nMaxDegree = " <<nMaxDegree<<endl;
+        
     //But we are setting it to zero
     k = 420;
 }
@@ -189,14 +215,14 @@ void graph::printMatrix(){
     }
 }
 
-/*Return Vertices set*/
-set<int> graph::getVerticesSet(){
-    return verticesSet;
-}
-
-/*Return Edges Set*/
-set<edge> graph::getEdgesSet(){
-    return edgesSet;
+/*Print the vertices set of the matrix*/
+void graph::printVertices(){
+    cout << endl << "Printing the vertices" << endl;
+    set<int>::iterator it;
+    for(int loop = 0 ; loop < verticesVector.size(); ++loop){
+        cout << verticesVector[loop] <<  " " ;
+    }
+    cout<<endl;
 }
 
 /*Return Max Degree*/
@@ -209,25 +235,6 @@ int graph::getK(){
     return k;
 }
 
-/*Print the edge set of the matrix*/
-void graph::printEdges(){
-    cout <<endl << "Printing the edges" <<endl;
-    set<edge>::iterator it;
-    for (it= edgesSet.begin(); it !=  edgesSet.end(); ++it){
-        (*it).printEdge();
-    }
-}
-
-/*Print the vertices set of the matrix*/
-void graph::printVertices(){
-    cout << endl << "Printing the vertices" << endl;
-    set<int>::iterator it;
-    for(it = verticesSet.begin(); it != verticesSet.end(); ++it){
-        cout << *it <<  " " ;
-    }
-    cout<<endl;
-}
-
 /*Return the total number of vertices in the graph*/
 int graph::getTotalVertices(){
     return nVertices;
@@ -236,4 +243,9 @@ int graph::getTotalVertices(){
 /*Return the adjacency matrix*/
 vector< vector <int> > & graph::getMatrix(){
     return matrix;
+}
+
+/*Return the vertices representation in the vector*/
+vector<int> graph::getVerticesVector(){
+    return verticesVector;
 }

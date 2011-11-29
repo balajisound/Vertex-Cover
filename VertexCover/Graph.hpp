@@ -33,37 +33,31 @@ private:
      * adjusting the offset there by eliminating the errors. 
      **/
     
-    //This matrix is not required later.
+    //This is the adjacency matrix
     vector< vector <int> > matrix;
     
-    //The set of Vertices
-    set<int> verticesSet;
-    
-    //The set of edges
-    set<edge> edgesSet;
-    
+    //Represent the vertices as a Vector rather than set<int>
+    vector<int> verticesVector;
+       
 public:
     
     //Static Object
     //static graph globalGraph;
      
     //Constructors
-    graph(set<int>, set<edge>);
     graph(string filename);
     graph(string filename, bool flag);
     
     //Printing
     void printMatrix();    
-    void printEdges();
     void printVertices();
     
     //Get functions
-    set<int> getVerticesSet();
-    set<edge> getEdgesSet();
     vector <vector <int> > & getMatrix();
     int getMaxDegree();
     int getK();
     int getTotalVertices();
+    vector<int> getVerticesVector();
     
 };
 

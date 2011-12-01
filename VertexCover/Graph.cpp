@@ -9,6 +9,11 @@
 
 using namespace std;
 
+graph::graph(int vertices, int maxDegree, int kk, vector< vector <int> > Matrix, vector<int> vertexcover):
+nVertices(vertices), nMaxDegree(maxDegree),k(kk), matrix(Matrix), verticesVector(vertexcover){
+    
+}
+
 //This Constructor is used to construct the first Graph from the input file
 //for adjacency Matrix
 graph::graph(string filename){
@@ -201,7 +206,7 @@ graph::graph(string filename, bool flag): nMaxDegree(0){
     cout << "nMaxDegree = " <<nMaxDegree<<endl;
         
     //But we are setting it to zero
-    k = 420;
+    k = 560;
 }
 
 /*Print the adjacency matrix*/

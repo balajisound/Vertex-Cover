@@ -1,5 +1,6 @@
 #include "VertexCover.hpp"
 #include <fstream>
+#include <algorithm>
 
 //default Constructor
 //vertexCover::vertexCover(graph g): G(g){}
@@ -305,7 +306,7 @@ void vertexCover::computeMinimalVC(){
     bool found = false;
     
     //Dummy initial value that will be replaced
-    int minimum = INT_MAX;
+    int minimum = (*G).getTotalVertices()+1;
     vector<int> dummy;
     vertexCover minimalVC(dummy, G);
     

@@ -45,6 +45,7 @@ public:
     //static graph globalGraph;
      
     //Constructors
+    graph(int , int , int , vector< vector <int> > , vector<int> );
     graph(string filename);
     graph(string filename, bool flag);
     

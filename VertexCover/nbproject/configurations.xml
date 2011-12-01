@@ -17,6 +17,7 @@
       <itemPath>small.txt</itemPath>
       <itemPath>sureshSmall.txt</itemPath>
       <itemPath>sureshSmall2.txt</itemPath>
+      <itemPath>v560.txt</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
